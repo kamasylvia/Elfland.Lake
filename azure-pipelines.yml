@@ -1,0 +1,65 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - main
+      - master
+      - dev
+
+resources:
+- repo: self
+
+pool:
+  vmImage: windows-2022
+
+steps:
+  # Allow scripts to access the system token
+  - checkout: self
+    persistCredentials: true
+  # Install CSharpier
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'custom'
+      custom: 'tool'
+      arguments: 'install -g csharpier'
+  # Run CSarpier to format the source code
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'custom'
+      custom: 'csharpier'
+      arguments: '.'
+  # Before git commands, be sure your account's default identity is set
+  - task: CmdLine@2
+    continueOnError: true
+    inputs:
+      script: |
+        git config --global user.email "$(Email)"
+        git config --global user.name "$(Username)"
+  # Push formatted code back to remote repository
+  - task: CmdLine@2
+    continueOnError: true
+    inputs:
+      script: |
+        git checkout $(Build.SourceBranchName)
+        git add -A
+        git commit --allow-empty -m "Format source code with CSharpier [skip ci]"
+        git push
+  # Package
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/*.csproj'
+      versioningScheme: 'byEnvVar'
+      versionEnvVar: 'BUILD_BUILDNUMBER'
+  # Push
+  - task: NuGetCommand@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'external'
+      publishFeedCredentials: 'NuGet.org'
