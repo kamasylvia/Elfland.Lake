@@ -1,21 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="NewId" />
-    <None Remove="MediatR.Extensions.Microsoft.DependencyInjection" />
-    <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
-    <None Remove="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" />
-    <None Remove="Microsoft.EntityFrameworkCore.Design" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NewId" Version="3.0.3" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PackageId>Elfland.Lake</PackageId>
+		<Authors>Kamasylvia</Authors>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Remove="NewId" />
+		<None Remove="MediatR.Extensions.Microsoft.DependencyInjection" />
+		<None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+		<None Remove="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" />
+		<None Remove="Microsoft.EntityFrameworkCore.Design" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="NewId" Version="3.0.3" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+	</ItemGroup>
 </Project>
