@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -13,10 +13,14 @@
 		<None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
 		<None Remove="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" />
 		<None Remove="Microsoft.EntityFrameworkCore.Design" />
+		<None Remove="Attributes\" />
+		<None Remove="Extensions\" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="NewId" Version="3.0.3" />
-		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Attributes\" />
+	  <Folder Include="Extensions\" />
 	</ItemGroup>
 </Project>
