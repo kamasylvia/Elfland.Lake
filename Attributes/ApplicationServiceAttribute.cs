@@ -3,13 +3,13 @@
 namespace Elfland.Lake.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
-public class DependencyAttribute : Attribute
+public class ApplicationServiceAttribute : Attribute
 {
     public ServiceLifetime Lifetime { get; set; } = ServiceLifetime.Transient;
 
-    public DependencyAttribute() { }
+    public ApplicationServiceAttribute() { }
 
-    public DependencyAttribute(ServiceLifetime serviceLifetime)
+    public ApplicationServiceAttribute(ServiceLifetime serviceLifetime)
     {
         Lifetime = serviceLifetime;
     }

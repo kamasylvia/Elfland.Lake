@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Elfland.Lake.Extensions;
 
-public static class AutomaticDependencyInjectionExtensions
+public static class ProgramExtensions
 {
-    public static void AddDependencies(this IServiceCollection services)
+    public static void AddApplicationServices(this IServiceCollection services)
     {
         services.RegisterLifetimesByAttribute(ServiceLifetime.Transient);
         services.RegisterLifetimesByAttribute(ServiceLifetime.Scoped);
@@ -22,7 +22,7 @@ public static class AutomaticDependencyInjectionExtensions
             .SelectMany(x => x.GetTypes())
             .Where(
                 implementationType =>
-                    implementationType.GetCustomAttribute<DependencyAttribute>()?.Lifetime
+                    implementationType.GetCustomAttribute<ApplicationServiceAttribute>()?.Lifetime
                         == serviceLifetime
                     && implementationType.IsClass
                     && !implementationType.IsAbstract
