@@ -4,16 +4,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Elfland.Lake.Extensions;
 
-public static class ProgramExtensions
+public static partial class ProgramExtensions
 {
     public static void AddApplicationServices(this IServiceCollection services)
     {
-        services.RegisterLifetimesByAttribute(ServiceLifetime.Transient);
-        services.RegisterLifetimesByAttribute(ServiceLifetime.Scoped);
-        services.RegisterLifetimesByAttribute(ServiceLifetime.Singleton);
+        services.RegisterServicesByAttribute(ServiceLifetime.Transient);
+        services.RegisterServicesByAttribute(ServiceLifetime.Scoped);
+        services.RegisterServicesByAttribute(ServiceLifetime.Singleton);
     }
 
-    private static void RegisterLifetimesByAttribute(
+    private static void RegisterServicesByAttribute(
         this IServiceCollection services,
         ServiceLifetime serviceLifetime
     ) =>
