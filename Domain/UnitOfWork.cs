@@ -11,7 +11,9 @@ public abstract class UnitOfWork<TDbContext> : IUnitOfWork where TDbContext : Db
         _context = context;
     }
 
-    public virtual async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken)) => await _context.SaveChangesAsync() >= 0;
+    public virtual async Task<bool> SaveEntitiesAsync(
+        CancellationToken cancellationToken = default(CancellationToken)
+    ) => await _context.SaveChangesAsync() >= 0;
 
     #region Disposable
     private bool disposed = false;
