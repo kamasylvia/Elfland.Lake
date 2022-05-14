@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Elfland.Lake.Ddd;
+namespace Elfland.Lake.Domain;
 
-public abstract class UnitOfWork<TDbContext> : IUnitOfWork, IDisposable where TDbContext : DbContext
+public abstract class UnitOfWork<TDbContext> : IUnitOfWork where TDbContext : DbContext
 {
     protected readonly TDbContext _context;
 
@@ -11,7 +11,7 @@ public abstract class UnitOfWork<TDbContext> : IUnitOfWork, IDisposable where TD
         _context = context;
     }
 
-    public async Task<bool> SaveAsync() => await _context.SaveChangesAsync() >= 0;
+    public virtual async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken)) => await _context.SaveChangesAsync() >= 0;
 
     #region Disposable
     private bool disposed = false;

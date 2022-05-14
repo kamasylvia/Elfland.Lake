@@ -1,4 +1,4 @@
-namespace Elfland.Lake.Ddd;
+namespace Elfland.Lake.Domain;
 
 public interface IRepository<TEntity> where TEntity : class
 {

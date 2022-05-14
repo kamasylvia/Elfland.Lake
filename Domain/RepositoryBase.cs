@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Elfland.Lake.Ddd;
+namespace Elfland.Lake.Domain;
 
 public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
     where TEntity : class
