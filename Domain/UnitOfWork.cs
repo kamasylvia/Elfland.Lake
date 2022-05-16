@@ -11,7 +11,7 @@ public abstract class UnitOfWork<TDbContext> : IUnitOfWork where TDbContext : Db
         _context = context;
     }
 
-    public virtual async Task<bool> SaveEntitiesAsync(
+    public virtual async Task<bool> SaveChangesAsync(
         CancellationToken cancellationToken = default(CancellationToken)
     ) => await _context.SaveChangesAsync() >= 0;
 
