@@ -24,6 +24,7 @@
 	  <Folder Include="Extensions\" />
 	</ItemGroup>
 	<ItemGroup>
+	  <PackageReference Include="MediatR" Version="10.0.1" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
 	  <PackageReference Include="NewId" Version="3.0.3+build.42.sha.fdf8bfa" />
 	</ItemGroup>
