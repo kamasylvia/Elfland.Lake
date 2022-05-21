@@ -5,7 +5,4 @@ using System.Threading.Tasks;
 
 namespace Elfland.Lake.Domain;
 
-public interface IEventBus
-{
-    
-}
+public interface IEventBus { }

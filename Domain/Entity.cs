@@ -4,6 +4,7 @@ public abstract class Entity
 {
     private int? _requestedHashCode;
     public virtual Guid? Id { get; protected set; }
+
     public bool IsTransient() => Id == default;
 
     public static bool operator ==(Entity left, Entity right) =>

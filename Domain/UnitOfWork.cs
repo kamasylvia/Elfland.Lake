@@ -16,13 +16,17 @@ public abstract class UnitOfWork<TDbContext> : IUnitOfWork where TDbContext : Db
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public virtual async Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+    public virtual async Task<bool> SaveChangesAsync(
+        CancellationToken cancellationToken = default(CancellationToken)
+    )
     {
         _currentTransaction ??= await _context.Database.BeginTransactionAsync(cancellationToken);
         return await _context.SaveChangesAsync(cancellationToken) >= 0;
     }
 
-    public virtual async Task<bool> CommitTransactionAsync(CancellationToken cancellationToken = default(CancellationToken))
+    public virtual async Task<bool> CommitTransactionAsync(
+        CancellationToken cancellationToken = default(CancellationToken)
+    )
     {
         try
         {
@@ -43,7 +47,6 @@ public abstract class UnitOfWork<TDbContext> : IUnitOfWork where TDbContext : Db
             }
         }
     }
-
 
     #region Disposable
     private bool disposed = false;
