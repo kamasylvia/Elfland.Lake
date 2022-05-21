@@ -3,9 +3,9 @@ namespace Elfland.Lake.Domain;
 public interface IRepository<TEntity> where TEntity : class
 {
     // Read
-    Task<TEntity?> GetByIdAsync(params object[] id);
-    Task<TEntity?> GetByIdAsync(IEnumerable<object> id);
-    Task<IEnumerable<TEntity>> GetListAsync(int? pageSize = null);
+    Task<TEntity?> FindByIdAsync(params object[] id);
+    Task<TEntity?> FindByIdAsync(IEnumerable<object> id);
+    Task<IEnumerable<TEntity>> GetListAsync(int? length = null);
 
     // Create
     Task AddAsync(TEntity entity);

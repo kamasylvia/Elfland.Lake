@@ -1,7 +1,10 @@
+using Elfland.Lake.Attributes;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Elfland.Lake.Domain;
 
+[ApplicationService(ServiceLifetime.Scoped)]
 public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
     where TEntity : class
     where TDbContext : DbContext
@@ -15,15 +18,15 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         _dbSet = context.Set<TEntity>();
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetListAsync(int? pageSize = null) =>
-        pageSize.HasValue
-            ? await _dbSet.Take(pageSize.Value).ToListAsync()
+    public virtual async Task<IEnumerable<TEntity>> GetListAsync(int? length = null) =>
+        length.HasValue
+            ? await _dbSet.Take(length.Value).ToListAsync()
             : await _dbSet.ToListAsync();
 
-    public virtual async Task<TEntity?> GetByIdAsync(params object[] id) =>
+    public virtual async Task<TEntity?> FindByIdAsync(params object[] id) =>
         await _dbSet.FindAsync(id);
 
-    public virtual async Task<TEntity?> GetByIdAsync(IEnumerable<object> id) =>
+    public virtual async Task<TEntity?> FindByIdAsync(IEnumerable<object> id) =>
         await _dbSet.FindAsync(id);
 
     public virtual async Task AddAsync(TEntity entity) => await _dbSet.AddAsync(entity);

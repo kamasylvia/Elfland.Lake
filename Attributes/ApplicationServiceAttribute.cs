@@ -9,8 +9,5 @@ public class ApplicationServiceAttribute : Attribute
 
     public ApplicationServiceAttribute() { }
 
-    public ApplicationServiceAttribute(ServiceLifetime serviceLifetime)
-    {
-        Lifetime = serviceLifetime;
-    }
+    public ApplicationServiceAttribute(ServiceLifetime serviceLifetime) => Lifetime = serviceLifetime;
 }
