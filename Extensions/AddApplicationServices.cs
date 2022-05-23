@@ -6,6 +6,11 @@ namespace Elfland.Lake.Extensions;
 
 public static partial class ProgramExtensions
 {
+    /// <summary>
+    /// Register all attributed services in the assembly to .NET IoC container.
+    /// These services must be decorated with [ApplicationService] attribute.
+    /// </summary>
+    /// <param name="services"></param>
     public static void AddApplicationServices(this IServiceCollection services)
     {
         services.RegisterServicesByAttribute(ServiceLifetime.Transient);
