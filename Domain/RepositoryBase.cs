@@ -6,7 +6,7 @@ namespace Elfland.Lake.Domain;
 
 [ApplicationService(ServiceLifetime.Scoped)]
 public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
-    where TEntity : class, IAggregateRoot
+    where TEntity : Entity, IAggregateRoot
     where TDbContext : DbContext
 {
     protected TDbContext _context;
