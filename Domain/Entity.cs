@@ -8,6 +8,7 @@ public abstract class Entity
     [Key]
     public virtual Guid? Id { get; protected set; } = NewId.NextGuid();
     private int? _requestedHashCode;
+
     public bool IsTransient() => Id == default;
 
     public static bool operator ==(Entity left, Entity right) =>
