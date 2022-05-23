@@ -21,5 +21,6 @@ public class DomainEventBus : IDomainEventBus
         {
             await _mediator.Publish(domainEvent);
         }
+        DomainEvents.Clear();
     }
 }

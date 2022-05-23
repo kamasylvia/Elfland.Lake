@@ -1,10 +1,13 @@
+using System.ComponentModel.DataAnnotations;
+using MassTransit;
+
 namespace Elfland.Lake.Domain;
 
 public abstract class Entity
 {
+    [Key]
+    public virtual Guid? Id { get; protected set; } = NewId.NextGuid();
     private int? _requestedHashCode;
-    public virtual Guid? Id { get; protected set; }
-
     public bool IsTransient() => Id == default;
 
     public static bool operator ==(Entity left, Entity right) =>
