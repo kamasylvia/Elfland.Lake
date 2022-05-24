@@ -1,11 +1,8 @@
-using Elfland.Lake.Attributes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Elfland.Lake.Domain;
 
-[ApplicationService(ServiceLifetime.Scoped)]
 public abstract class UnitOfWork<TDbContext> : IUnitOfWork where TDbContext : DbContext
 {
     protected readonly TDbContext _context;
