@@ -2,17 +2,17 @@ using System.Reflection;
 
 namespace Elfland.Lake.Domain;
 
-public abstract class Enumeration : IComparable
+public abstract class EnumerationPixie : IComparable
 {
     public string Name { get; private set; }
 
     public int Id { get; private set; }
 
-    protected Enumeration(int id, string name) => (Id, Name) = (id, name);
+    protected EnumerationPixie(int id, string name) => (Id, Name) = (id, name);
 
     public override string ToString() => Name;
 
-    public static IEnumerable<T> GetAll<T>() where T : Enumeration =>
+    public static IEnumerable<T> GetAll<T>() where T : EnumerationPixie =>
         typeof(T)
             .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
             .Select(f => f.GetValue(null))
@@ -20,7 +20,7 @@ public abstract class Enumeration : IComparable
 
     public override bool Equals(object? obj)
     {
-        if (obj is Enumeration otherValue)
+        if (obj is EnumerationPixie otherValue)
         {
             var typeMatches = GetType().Equals(obj.GetType());
             var valueMatches = Id.Equals(otherValue.Id);
@@ -33,19 +33,19 @@ public abstract class Enumeration : IComparable
 
     public override int GetHashCode() => Id.GetHashCode();
 
-    public static int AbsoluteDifference(Enumeration firstValue, Enumeration secondValue)
+    public static int AbsoluteDifference(EnumerationPixie firstValue, EnumerationPixie secondValue)
     {
         var absoluteDifference = Math.Abs(firstValue.Id - secondValue.Id);
         return absoluteDifference;
     }
 
-    public static T FromValue<T>(int value) where T : Enumeration
+    public static T FromValue<T>(int value) where T : EnumerationPixie
     {
         var matchingItem = Parse<T, int>(value, "value", item => item.Id == value);
         return matchingItem;
     }
 
-    public static T FromDisplayName<T>(string displayName) where T : Enumeration
+    public static T FromDisplayName<T>(string displayName) where T : EnumerationPixie
     {
         var matchingItem = Parse<T, string>(
             displayName,
@@ -56,7 +56,7 @@ public abstract class Enumeration : IComparable
     }
 
     private static T Parse<T, K>(K value, string description, Func<T, bool> predicate)
-        where T : Enumeration
+        where T : EnumerationPixie
     {
         var matchingItem = GetAll<T>().FirstOrDefault(predicate);
 
@@ -68,5 +68,5 @@ public abstract class Enumeration : IComparable
         return matchingItem;
     }
 
-    public int CompareTo(object? other) => Id.CompareTo((other as Enumeration)?.Id);
+    public int CompareTo(object? other) => Id.CompareTo((other as EnumerationPixie)?.Id);
 }

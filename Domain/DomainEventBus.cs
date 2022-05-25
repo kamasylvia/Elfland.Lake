@@ -1,4 +1,5 @@
 using Elfland.Lake.Attributes;
+using Elfland.Lake.Domain.Interfaces;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 

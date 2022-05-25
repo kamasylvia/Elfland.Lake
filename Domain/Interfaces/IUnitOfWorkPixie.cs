@@ -1,6 +1,6 @@
 namespace Elfland.Lake.Domain;
 
-public interface IUnitOfWork : IDisposable
+public interface IUnitOfWorkPixie : IDisposable
 {
     Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
     Task<bool> CommitTransactionAsync(

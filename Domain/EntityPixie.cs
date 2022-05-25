@@ -3,7 +3,7 @@ using MassTransit;
 
 namespace Elfland.Lake.Domain;
 
-public abstract class Entity
+public abstract class EntityPixie
 {
     [Key]
     public virtual Guid? Id { get; protected set; } = NewId.NextGuid();
@@ -12,14 +12,14 @@ public abstract class Entity
 
     public bool IsTransient() => Id == default;
 
-    public static bool operator ==(Entity left, Entity right) =>
+    public static bool operator ==(EntityPixie left, EntityPixie right) =>
         Equals(left, null) ? Equals(right, null) : left.Equals(right);
 
-    public static bool operator !=(Entity left, Entity right) => !(left == right);
+    public static bool operator !=(EntityPixie left, EntityPixie right) => !(left == right);
 
     public override bool Equals(object? obj)
     {
-        if (obj is null || obj is not Entity)
+        if (obj is null || obj is not EntityPixie)
             return false;
 
         if (Object.ReferenceEquals(this, obj))
@@ -28,7 +28,7 @@ public abstract class Entity
         if (this.GetType() != obj.GetType())
             return false;
 
-        Entity item = (Entity)obj;
+        EntityPixie item = (EntityPixie)obj;
 
         return item.IsTransient() || IsTransient() ? false : item.Id == this.Id;
     }

@@ -1,6 +1,6 @@
-namespace Elfland.Lake.Domain;
+namespace Elfland.Lake.Domain.Interfaces;
 
-public interface IRepository<TEntity> where TEntity : Entity, IAggregateRoot
+public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoot
 {
     // Read
     Task<TEntity?> FindByIdAsync(params object[] id);

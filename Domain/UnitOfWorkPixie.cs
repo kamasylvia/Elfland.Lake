@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Elfland.Lake.Domain;
 
-public abstract class UnitOfWork<TDbContext> : IUnitOfWork where TDbContext : DbContext
+public abstract class UnitOfWorkPixie<TDbContext> : IUnitOfWorkPixie where TDbContext : DbContext
 {
     protected readonly TDbContext _context;
     protected IDbContextTransaction? _currentTransaction;
 
-    public UnitOfWork(TDbContext context)
+    public UnitOfWorkPixie(TDbContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
