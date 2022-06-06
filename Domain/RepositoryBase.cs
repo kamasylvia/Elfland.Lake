@@ -1,8 +1,11 @@
+using Elfland.Lake.Attributes;
 using Elfland.Lake.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Elfland.Lake.Domain;
 
+[ApplicationService(ServiceLifetime.Scoped)]
 public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
     where TEntity : EntityPixie, IAggregateRoot
     where TDbContext : DbContext

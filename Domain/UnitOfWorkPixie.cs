@@ -1,8 +1,11 @@
+using Elfland.Lake.Attributes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Elfland.Lake.Domain;
 
+[ApplicationService(ServiceLifetime.Scoped)]
 public abstract class UnitOfWorkPixie<TDbContext> : IUnitOfWorkPixie where TDbContext : DbContext
 {
     protected readonly TDbContext _context;
