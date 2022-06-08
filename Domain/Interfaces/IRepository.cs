@@ -11,7 +11,7 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
         int? count = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         params Expression<Func<TEntity, bool>>[] filters
-        );
+    );
 
     // Create
     Task AddAsync(TEntity entity);
