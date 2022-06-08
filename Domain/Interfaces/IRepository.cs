@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 namespace Elfland.Lake.Domain.Interfaces;
 
 public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoot
@@ -5,7 +7,11 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
     // Read
     Task<TEntity?> FindByIdAsync(params object[] id);
     Task<TEntity?> FindByIdAsync(IEnumerable<object> id);
-    Task<IEnumerable<TEntity>> GetListAsync(int? length = null);
+    Task<IEnumerable<TEntity>> GetListAsync(
+        int? count = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        params Expression<Func<TEntity, bool>>[] filters
+        );
 
     // Create
     Task AddAsync(TEntity entity);

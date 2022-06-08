@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Elfland.Lake.Attributes;
 using Elfland.Lake.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -19,10 +20,27 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         _dbSet = context.Set<TEntity>();
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetListAsync(int? length = null) =>
-        length.HasValue
-            ? await _dbSet.Take(length.Value).ToListAsync()
-            : await _dbSet.ToListAsync();
+    public virtual async Task<IEnumerable<TEntity>> GetListAsync(int? count = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        params Expression<Func<TEntity, bool>>[] filters
+    )
+    {
+        var result = _dbSet.AsQueryable();
+        if (count.HasValue)
+        {
+            foreach (var filter in filters)
+            {
+                result = result.Where(filter);
+            }
+        }
+
+        if (orderBy is not null)
+        {
+            result = orderBy(result);
+        }
+
+        return await result.ToListAsync();
+    }
 
     public virtual async Task<TEntity?> FindByIdAsync(params object[] id) =>
         await _dbSet.FindAsync(id);
