@@ -22,25 +22,25 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
 
     public virtual async Task<IEnumerable<TEntity>> GetListAsync(
         int? count = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        params Expression<Func<TEntity, bool>>[] filters
+        Expression<Func<TEntity, bool>>? filter = null,
+        Expression<Func<TEntity, IOrderedQueryable<TEntity>>>? orderBy = null
     )
     {
         var result = _dbSet.AsQueryable();
-        if (count.HasValue)
+
+        if (filter is not null)
         {
-            foreach (var filter in filters)
-            {
-                result = result.Where(filter);
-            }
+            result = result.Where(filter);
         }
 
         if (orderBy is not null)
         {
-            result = orderBy(result);
+            result.OrderBy(orderBy);
         }
 
-        return await result.ToListAsync();
+        return count.HasValue
+          ? await result.Take(count.Value).ToListAsync()
+          : await result.ToListAsync();
     }
 
     public virtual async Task<TEntity?> FindByIdAsync(params object[] id) =>

@@ -33,41 +33,45 @@ public static partial class ProgramExtensions
                     && !implementationType.IsAbstract
             )
             .ToList()
-            .ForEach(serviceImplementation =>
-            {
-                var interfaces = serviceImplementation.GetInterfaces().ToList();
-                if (interfaces.Count > 0)
+            .ForEach(
+                serviceImplementation =>
                 {
-                    interfaces.ForEach(interfaceType =>
+                    var interfaces = serviceImplementation.GetInterfaces().ToList();
+                    if (interfaces.Count > 0)
+                    {
+                        interfaces.ForEach(
+                            interfaceType =>
+                            {
+                                switch (serviceLifetime)
+                                {
+                                    case ServiceLifetime.Transient:
+                                        services.AddTransient(interfaceType, serviceImplementation);
+                                        break;
+                                    case ServiceLifetime.Scoped:
+                                        services.AddScoped(interfaceType, serviceImplementation);
+                                        break;
+                                    case ServiceLifetime.Singleton:
+                                        services.AddSingleton(interfaceType, serviceImplementation);
+                                        break;
+                                }
+                            }
+                        );
+                    }
+                    else
                     {
                         switch (serviceLifetime)
                         {
                             case ServiceLifetime.Transient:
-                                services.AddTransient(interfaceType, serviceImplementation);
+                                services.AddTransient(serviceImplementation);
                                 break;
                             case ServiceLifetime.Scoped:
-                                services.AddScoped(interfaceType, serviceImplementation);
+                                services.AddScoped(serviceImplementation);
                                 break;
                             case ServiceLifetime.Singleton:
-                                services.AddSingleton(interfaceType, serviceImplementation);
+                                services.AddSingleton(serviceImplementation);
                                 break;
                         }
-                    });
-                }
-                else
-                {
-                    switch (serviceLifetime)
-                    {
-                        case ServiceLifetime.Transient:
-                            services.AddTransient(serviceImplementation);
-                            break;
-                        case ServiceLifetime.Scoped:
-                            services.AddScoped(serviceImplementation);
-                            break;
-                        case ServiceLifetime.Singleton:
-                            services.AddSingleton(serviceImplementation);
-                            break;
                     }
                 }
-            });
+            );
 }
