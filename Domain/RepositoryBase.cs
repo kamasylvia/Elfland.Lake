@@ -39,8 +39,8 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         }
 
         return count.HasValue
-          ? await result.Take(count.Value).ToListAsync()
-          : await result.ToListAsync();
+            ? await result.Take(count.Value).ToListAsync()
+            : await result.ToListAsync();
     }
 
     public virtual async Task<TEntity?> FindByIdAsync(params object[] id) =>
