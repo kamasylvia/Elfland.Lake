@@ -10,8 +10,8 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
     Task<IEnumerable<TEntity>> GetListAsync<TKey>(
         int? count = null,
         Expression<Func<TEntity, bool>>? filter = null,
-        Expression<Func<TEntity, TKey>>? orderBy = null,
-        bool orderAscending = true
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        string includeProperties = ""
     );
 
     // Create
