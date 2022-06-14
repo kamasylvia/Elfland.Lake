@@ -39,15 +39,19 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
             query = orderBy(query);
         }
 
-        foreach (var includeProperty in includeProperties.Split
-            (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        foreach (
+            var includeProperty in includeProperties.Split(
+                new char[] { ',' },
+                StringSplitOptions.RemoveEmptyEntries
+            )
+        )
         {
             query = query.Include(includeProperty);
         }
 
         return count.HasValue
-          ? await query.Take(count.Value).ToListAsync()
-          : await query.ToListAsync();
+            ? await query.Take(count.Value).ToListAsync()
+            : await query.ToListAsync();
     }
 
     public virtual async Task<TEntity?> FindByIdAsync(params object[] id) =>
