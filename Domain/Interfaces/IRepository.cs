@@ -9,9 +9,23 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
     Task<TEntity?> FindByIdAsync(IEnumerable<object> id);
     Task<IEnumerable<TEntity>> GetListAsync(
         int? count = null,
-        Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        string includeProperties = ""
+        string includeProperties = "",
+       params Expression<Func<TEntity, bool>>[] filters
+    );
+    Task<IEnumerable<TEntity>> GetListAsync(
+        int start = 0,
+        int? end = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        string includeProperties = "",
+       params Expression<Func<TEntity, bool>>[] filters
+    );
+    Task<IEnumerable<TEntity>> GetPaginationAsync(
+        int pageIndex,
+        int pageSize,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        string includeProperties = "",
+       params Expression<Func<TEntity, bool>>[] filters
     );
 
     // Create

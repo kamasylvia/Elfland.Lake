@@ -22,17 +22,18 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
 
     public virtual async Task<IEnumerable<TEntity>> GetListAsync(
         int? count = null,
-        Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        string includeProperties = ""
+        string includeProperties = "",
+       params Expression<Func<TEntity, bool>>[] filters
     )
     {
         IQueryable<TEntity> query = _dbSet;
 
-        if (filter is not null)
+        foreach (var filter in filters)
         {
             query = query.Where(filter);
         }
+
 
         if (orderBy is not null)
         {
@@ -53,6 +54,35 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
             ? await query.Take(count.Value).ToListAsync()
             : await query.ToListAsync();
     }
+
+    public virtual async Task<IEnumerable<TEntity>> GetListAsync(
+        int start = 0,
+        int? end = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        string includeProperties = "",
+       params Expression<Func<TEntity, bool>>[] filters
+    ) =>
+        await GetListAsync(
+            end - start,
+            orderBy,
+            includeProperties,
+            filters.Append(e => e.Index >= start && !(e.Index >= end)).ToArray()
+        );
+
+    public virtual async Task<IEnumerable<TEntity>> GetPaginationAsync(
+        int pageIndex,
+        int pageSize,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        string includeProperties = "",
+       params Expression<Func<TEntity, bool>>[] filters
+    ) =>
+        await GetListAsync(
+            start: pageIndex * pageSize,
+            end: (pageIndex + 1) * pageSize,
+        orderBy: orderBy,
+        includeProperties: includeProperties,
+        filters: filters
+    );
 
     public virtual async Task<TEntity?> FindByIdAsync(params object[] id) =>
         await _dbSet.FindAsync(id);

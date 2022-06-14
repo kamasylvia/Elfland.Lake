@@ -10,7 +10,7 @@ public abstract class EntityPixie
     public virtual Guid? Id { get; protected set; } = NewId.NextGuid();
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public virtual int? PageIndex { get; set; }
+    public virtual int Index { get; set; }
 
     private int? _requestedHashCode;
 
