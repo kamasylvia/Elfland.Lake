@@ -8,6 +8,8 @@ public abstract class EntityPixie
     [Key]
     public virtual Guid? Id { get; protected set; } = NewId.NextGuid();
 
+    public int PageIndex { get; set; }
+
     private int? _requestedHashCode;
 
     public bool IsTransient() => Id == default;
