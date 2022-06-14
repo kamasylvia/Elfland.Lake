@@ -20,7 +20,7 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         _dbSet = context.Set<TEntity>();
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetListAsync<TKey>(
+    public virtual async Task<IEnumerable<TEntity>> GetListAsync(
         int? count = null,
         Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,

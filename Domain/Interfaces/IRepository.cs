@@ -7,7 +7,7 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
     // Read
     Task<TEntity?> FindByIdAsync(params object[] id);
     Task<TEntity?> FindByIdAsync(IEnumerable<object> id);
-    Task<IEnumerable<TEntity>> GetListAsync<TKey>(
+    Task<IEnumerable<TEntity>> GetListAsync(
         int? count = null,
         Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
