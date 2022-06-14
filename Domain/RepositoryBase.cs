@@ -20,10 +20,10 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         _dbSet = context.Set<TEntity>();
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetListAsync(
+    public virtual async Task<IEnumerable<TEntity>> GetListAsync<TKey>(
         int? count = null,
         Expression<Func<TEntity, bool>>? filter = null,
-        Expression<Func<TEntity, IOrderedQueryable<TEntity>>>? orderBy = null
+        Expression<Func<TEntity, TKey>>? orderBy = null
     )
     {
         var result = _dbSet.AsQueryable();
@@ -35,7 +35,7 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
 
         if (orderBy is not null)
         {
-            result.OrderBy(orderBy);
+            result = result.OrderBy(orderBy);
         }
 
         return count.HasValue

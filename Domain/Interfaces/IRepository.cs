@@ -9,8 +9,7 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
     Task<TEntity?> FindByIdAsync(IEnumerable<object> id);
     Task<IEnumerable<TEntity>> GetListAsync(
         int? count = null,
-        Expression<Func<TEntity, bool>>? filter = null,
-        Expression<Func<TEntity, IOrderedQueryable<TEntity>>>? orderBy = null
+        Expression<Func<TEntity, bool>>? filter = null
     );
 
     // Create
