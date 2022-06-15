@@ -21,15 +21,16 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
     }
 
     public virtual async Task<IEnumerable<TEntity>> GetListAsync(
-        int? count = null,
+        int start = 0,
+        int? end = null,
+        Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        string includeProperties = "",
-        params Expression<Func<TEntity, bool>>[] filters
+        string includeProperties = ""
     )
     {
         IQueryable<TEntity> query = _dbSet;
 
-        foreach (var filter in filters)
+        if (filter is not null)
         {
             query = query.Where(filter);
         }
@@ -49,39 +50,24 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
             query = query.Include(includeProperty);
         }
 
-        return count.HasValue
-            ? await query.Take(count.Value).ToListAsync()
-            : await query.ToListAsync();
+        return end.HasValue
+            ? await query.Skip(start).Take(end.Value - start).ToListAsync()
+             : await query.Skip(start).ToListAsync();
     }
-
-    public virtual async Task<IEnumerable<TEntity>> GetListAsync(
-        int start = 0,
-        int? end = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        string includeProperties = "",
-        params Expression<Func<TEntity, bool>>[] filters
-    ) =>
-        await GetListAsync(
-            end - start,
-            orderBy,
-            includeProperties,
-            filters.Append(e => e.Index >= start && !(e.Index >= end)).ToArray()
-        );
 
     public virtual async Task<IEnumerable<TEntity>> GetPaginationAsync(
         int pageIndex,
         int pageSize,
+        Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        string includeProperties = "",
-        params Expression<Func<TEntity, bool>>[] filters
-    ) =>
-        await GetListAsync(
-            start: pageIndex * pageSize,
-            end: (pageIndex + 1) * pageSize,
-            orderBy: orderBy,
-            includeProperties: includeProperties,
-            filters: filters
-        );
+        string includeProperties = ""
+    ) => await GetListAsync(
+        start: pageIndex * pageSize,
+        end: (pageIndex + 1) * pageSize,
+        filter: filter,
+        orderBy: orderBy,
+        includeProperties: includeProperties
+    );
 
     public virtual async Task<TEntity?> FindByIdAsync(params object[] id) =>
         await _dbSet.FindAsync(id);
