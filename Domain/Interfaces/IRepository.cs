@@ -12,7 +12,7 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
         int? end = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         string includeProperties = "",
-       params Expression<Func<TEntity, bool>>[] filters
+        params Expression<Func<TEntity, bool>>[] filters
     );
     Task<IEnumerable<TEntity>> GetPaginationAsync(
         int pageIndex,
@@ -20,7 +20,7 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
         Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         string includeProperties = "",
-       params Expression<Func<TEntity, bool>>[] filters
+        params Expression<Func<TEntity, bool>>[] filters
     );
 
     // Create

@@ -25,7 +25,7 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         int? end = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         string includeProperties = "",
-       params Expression<Func<TEntity, bool>>[] filters
+        params Expression<Func<TEntity, bool>>[] filters
     )
     {
         IQueryable<TEntity> query = _dbSet;
@@ -61,7 +61,7 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         string includeProperties = "",
-       params Expression<Func<TEntity, bool>>[] filters
+        params Expression<Func<TEntity, bool>>[] filters
     ) =>
         await GetListAsync(
             start: pageIndex * pageSize,
