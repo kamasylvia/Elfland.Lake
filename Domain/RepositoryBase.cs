@@ -52,7 +52,7 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
 
         return end.HasValue
             ? await query.Skip(start).Take(end.Value - start).ToListAsync()
-             : await query.Skip(start).ToListAsync();
+            : await query.Skip(start).ToListAsync();
     }
 
     public virtual async Task<IEnumerable<TEntity>> GetPaginationAsync(
@@ -61,13 +61,14 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         string includeProperties = ""
-    ) => await GetListAsync(
-        start: pageIndex * pageSize,
-        end: (pageIndex + 1) * pageSize,
-        filter: filter,
-        orderBy: orderBy,
-        includeProperties: includeProperties
-    );
+    ) =>
+        await GetListAsync(
+            start: pageIndex * pageSize,
+            end: (pageIndex + 1) * pageSize,
+            filter: filter,
+            orderBy: orderBy,
+            includeProperties: includeProperties
+        );
 
     public virtual async Task<TEntity?> FindByIdAsync(params object[] id) =>
         await _dbSet.FindAsync(id);
