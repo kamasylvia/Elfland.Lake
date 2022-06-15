@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using MassTransit;
 
 namespace Elfland.Lake.Domain;
@@ -9,8 +8,7 @@ public abstract class EntityPixie
     [Key]
     public virtual Guid? Id { get; protected set; } = NewId.NextGuid();
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public virtual int Index { get; set; }
+    public virtual int? Index { get; set; }
 
     private int? _requestedHashCode;
 
