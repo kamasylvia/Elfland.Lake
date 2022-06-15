@@ -23,14 +23,14 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
     public virtual async Task<IEnumerable<TEntity>> GetListAsync(
         int start = 0,
         int? end = null,
-        Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        string includeProperties = ""
+        string includeProperties = "",
+       params Expression<Func<TEntity, bool>>[] filters
     )
     {
         IQueryable<TEntity> query = _dbSet;
 
-        if (filter is not null)
+        foreach (var filter in filters)
         {
             query = query.Where(filter);
         }
@@ -60,14 +60,15 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         int pageSize,
         Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        string includeProperties = ""
+        string includeProperties = "",
+       params Expression<Func<TEntity, bool>>[] filters
     ) =>
         await GetListAsync(
             start: pageIndex * pageSize,
             end: (pageIndex + 1) * pageSize,
-            filter: filter,
             orderBy: orderBy,
-            includeProperties: includeProperties
+            includeProperties: includeProperties,
+            filters: filters
         );
 
     public virtual async Task<TEntity?> FindByIdAsync(params object[] id) =>
