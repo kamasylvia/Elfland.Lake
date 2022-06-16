@@ -7,6 +7,7 @@ public abstract class EntityPixie
 {
     [Key]
     public virtual Guid? Id { get; protected set; } = NewId.NextGuid();
+    public DateTime CreateTime { get; } = DateTime.UtcNow;
 
     private int? _requestedHashCode;
 
