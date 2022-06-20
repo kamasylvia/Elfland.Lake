@@ -87,8 +87,8 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         return result;
     }
 
-    public Task<IEnumerable<TEntity>> FindRangeAsync(IEnumerable<object> keys)
-    => FindRangeAsync(keys.ToArray());
+    public Task<IEnumerable<TEntity>> FindRangeAsync(IEnumerable<object> keys) =>
+        FindRangeAsync(keys.ToArray());
 
     public virtual async Task AddAsync(TEntity entity) => await _dbSet.AddAsync(entity);
 
