@@ -134,6 +134,10 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
     public virtual void DeleteRange(IEnumerable<TEntity> entityToDelete) =>
         _dbSet.RemoveRange(entityToDelete);
 
+    public async Task DeleteByKeysAsync(params object[] keys) => DeleteRange(await FindRangeAsync(keys));
+
+    public async Task DeleteByKeysAsync(IEnumerable<object> keys) => DeleteRange(await FindRangeAsync(keys));
+
     public virtual void Update(TEntity entityToUpdate) => _dbSet.Update(entityToUpdate);
 
     public virtual void UpdateRange(params TEntity[] entities) => _dbSet.UpdateRange(entities);
