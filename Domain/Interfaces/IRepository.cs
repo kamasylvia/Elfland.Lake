@@ -7,6 +7,8 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
     // Read
     Task<TEntity?> FindByIdAsync(params object[] id);
     Task<TEntity?> FindByIdAsync(IEnumerable<object> id);
+    Task<IEnumerable<TEntity>> FindRangeAsync(params object[] keys);
+    Task<IEnumerable<TEntity>> FindRangeAsync(IEnumerable<object> keys);
     Task<IEnumerable<TEntity>> GetListAsync(
         int start = 0,
         int? end = null,
