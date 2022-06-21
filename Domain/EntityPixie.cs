@@ -12,6 +12,8 @@ public abstract class EntityPixie
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public DateTime? CreatedTime { get; init; } = DateTime.UtcNow;
 
+    public string? Remark { get; set; }
+
     private int? _requestedHashCode;
 
     public bool IsTransient() => Id == default;
