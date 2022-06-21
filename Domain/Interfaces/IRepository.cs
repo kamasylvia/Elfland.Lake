@@ -37,7 +37,7 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
     void UpdateRange(IEnumerable<TEntity> entities);
 
     // Delete
-    void Delete(TEntity entityToDelete);
+    void DeleteByEntity(TEntity entityToDelete);
     Task DeleteByIdAsync(object id);
     Task DeleteByIdAsync(params object[] ids);
     Task DeleteByIdAsync(IEnumerable<object> ids);

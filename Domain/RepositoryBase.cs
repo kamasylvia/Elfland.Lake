@@ -101,32 +101,13 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
     public virtual async Task<TEntity> InsertAsync(TEntity entity) =>
         (await _dbSet.AddAsync(entity)).Entity;
 
-    public virtual void Delete(TEntity entityToDelete) => _dbSet.Remove(entityToDelete);
+    public virtual void DeleteByEntity(TEntity entityToDelete) => _dbSet.Remove(entityToDelete);
 
-    public virtual async Task DeleteByIdAsync(object id)
-    {
-        var entityToDelete = await _dbSet.FindAsync(id);
-        if (entityToDelete is not null)
-        {
-            Delete(entityToDelete);
-        }
-    }
+    public virtual async Task DeleteByIdAsync(object id) => DeleteByEntity(await _dbSet.FindAsync(id) ?? throw new KeyNotFoundException());
 
-    public virtual async Task DeleteByIdAsync(params object[] ids)
-    {
-        foreach (var item in ids)
-        {
-            await DeleteByIdAsync(item);
-        }
-    }
+    public virtual async Task DeleteByIdAsync(params object[] ids) => DeleteByEntity(await _dbSet.FindAsync(ids) ?? throw new KeyNotFoundException());
 
-    public virtual async Task DeleteByIdAsync(IEnumerable<object> ids)
-    {
-        foreach (var item in ids)
-        {
-            await DeleteByIdAsync(item);
-        }
-    }
+    public virtual async Task DeleteByIdAsync(IEnumerable<object> ids) => DeleteByEntity(await _dbSet.FindAsync(ids) ?? throw new KeyNotFoundException());
 
     public virtual void DeleteRange(params TEntity[] entityToDelete) =>
         _dbSet.RemoveRange(entityToDelete);
