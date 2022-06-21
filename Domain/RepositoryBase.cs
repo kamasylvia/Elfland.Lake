@@ -83,16 +83,21 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
     #endregion
 
     #region Create
-    public virtual async Task AddAsync(TEntity entity) =>
-        await _dbSet.AddAsync(entity);
+    public virtual async Task AddAsync(TEntity entity) => await _dbSet.AddAsync(entity);
 
-    public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities) => await _dbSet.AddRangeAsync(entities);
+    public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities) =>
+        await _dbSet.AddRangeAsync(entities);
 
     public virtual async Task<TEntity> InsertAsync(TEntity entity) =>
         (await _dbSet.AddAsync(entity)).Entity;
 
-    public virtual async Task<IEnumerable<TEntity>> InsertRangeAsync(IEnumerable<TEntity> entities) =>
-        await entities.ToAsyncEnumerable().SelectAwait(async entity => await InsertAsync(entity)).ToListAsync();
+    public virtual async Task<IEnumerable<TEntity>> InsertRangeAsync(
+        IEnumerable<TEntity> entities
+    ) =>
+        await entities
+            .ToAsyncEnumerable()
+            .SelectAwait(async entity => await InsertAsync(entity))
+            .ToListAsync();
     #endregion
 
     #region Delete
