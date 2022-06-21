@@ -4,9 +4,9 @@ namespace Elfland.Lake.Domain.Interfaces;
 
 public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoot
 {
-    // Read
+    #region Read
     Task<TEntity?> FindByIdAsync(params object[] keyValues);
-    Task<IEnumerable<TEntity>> FindRangeAsync(IEnumerable<object> keys);
+    Task<IEnumerable<TEntity>> FindRangeAsync<TKey>(IEnumerable<TKey> keys);
     Task<IEnumerable<TEntity>> SearchAsync(
         int start = 0,
         int? end = null,
@@ -22,20 +22,24 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
         string includeProperties = "",
         params Expression<Func<TEntity, bool>>[] filters
     );
+    #endregion
 
-    // Create
+    #region Create
     Task AddAsync(TEntity entity);
     Task AddRangeAsync(IEnumerable<TEntity> entities);
     Task<TEntity> InsertAsync(TEntity entity);
     Task<IEnumerable<TEntity>> InsertRangeAsync(IEnumerable<TEntity> entities);
+    #endregion
 
-    // Update
+    #region Update
     void Update(TEntity entity);
     void UpdateRange(IEnumerable<TEntity> entities);
+    #endregion
 
-    // Delete
+    #region Delete
     void Delete(TEntity entity);
     void DeleteRange(IEnumerable<TEntity> entities);
     Task DeleteByIdAsync(params object[] keyValues);
-    Task DeleteRangeByKeysAsync(IEnumerable<object> keys);
+    Task DeleteRangeByKeysAsync<TKey>(IEnumerable<TKey> keys);
+    #endregion
 }
