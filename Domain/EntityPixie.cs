@@ -10,9 +10,9 @@ public abstract class EntityPixie
     public virtual Guid? Id { get; protected set; } = NewId.NextGuid();
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public DateTime? CreatedTime { get; init; } = DateTime.UtcNow;
+    public virtual DateTime? CreatedTime { get; init; } = DateTime.UtcNow;
 
-    public string? Remark { get; set; }
+    public virtual string? Remark { get; set; }
 
     private int? _requestedHashCode;
 
