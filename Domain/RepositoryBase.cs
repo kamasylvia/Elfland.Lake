@@ -77,7 +77,11 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
 
     public async Task<IEnumerable<TEntity>> FindRangeAsync<TKey>(IEnumerable<TKey> keys) =>
         await keys.ToAsyncEnumerable()
-            .SelectAwait(async key => await FindByIdAsync(key ?? throw new ArgumentNullException()) ?? throw new KeyNotFoundException())
+            .SelectAwait(
+                async key =>
+                    await FindByIdAsync(key ?? throw new ArgumentNullException())
+                    ?? throw new KeyNotFoundException()
+            )
             .ToListAsync();
 
     #endregion
@@ -109,7 +113,10 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         Delete(await _dbSet.FindAsync(keyValues) ?? throw new KeyNotFoundException());
 
     public virtual async Task DeleteRangeByKeysAsync<TKey>(IEnumerable<TKey> keys) =>
-        await keys.ToAsyncEnumerable().ForEachAwaitAsync(async key => await DeleteByIdAsync(key ?? throw new ArgumentNullException()));
+        await keys.ToAsyncEnumerable()
+            .ForEachAwaitAsync(
+                async key => await DeleteByIdAsync(key ?? throw new ArgumentNullException())
+            );
     #endregion
 
     #region Update
