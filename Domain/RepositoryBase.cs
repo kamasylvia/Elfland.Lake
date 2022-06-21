@@ -105,10 +105,10 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         Delete(await _dbSet.FindAsync(keys) ?? throw new KeyNotFoundException());
 
     public async Task DeleteRangeByKeysAsync(params object[] keys) =>
-        await keys.ToAsyncEnumerable().ForEachAsync(async key => await DeleteByIdAsync(key));
+        await keys.ToAsyncEnumerable().ForEachAwaitAsync(async key => await DeleteByIdAsync(key));
 
     public async Task DeleteRangeByKeysAsync(IEnumerable<object> keys) =>
-        await keys.ToAsyncEnumerable().ForEachAsync(async key => await DeleteByIdAsync(key));
+        await keys.ToAsyncEnumerable().ForEachAwaitAsync(async key => await DeleteByIdAsync(key));
 
     public virtual void Update(params TEntity[] entities) => _dbSet.UpdateRange(entities);
 
