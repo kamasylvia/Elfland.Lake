@@ -74,21 +74,12 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
     public virtual async Task<TEntity?> FindByIdAsync(params object[] keys) =>
         await _dbSet.FindAsync(keys);
 
-    public virtual async Task<TEntity?> FindByIdAsync(IEnumerable<object> keys) =>
-        await _dbSet.FindAsync(keys);
-
     public async Task<IEnumerable<TEntity>> FindRangeAsync(params object[] keys) =>
         await keys.ToAsyncEnumerable()
             .SelectAwait(async key => await FindByIdAsync(key) ?? throw new KeyNotFoundException())
             .ToListAsync();
 
-    public Task<IEnumerable<TEntity>> FindRangeAsync(IEnumerable<object> keys) =>
-        FindRangeAsync(keys.ToArray());
-
     public virtual async Task AddAsync(params TEntity[] entities) =>
-        await _dbSet.AddRangeAsync(entities);
-
-    public virtual async Task AddAsync(IEnumerable<TEntity> entities) =>
         await _dbSet.AddRangeAsync(entities);
 
     public virtual async Task<TEntity> InsertAsync(TEntity entity) =>
@@ -96,18 +87,10 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
 
     public virtual void Delete(params TEntity[] entities) => _dbSet.RemoveRange(entities);
 
-    public virtual void Delete(IEnumerable<TEntity> entities) => _dbSet.RemoveRange(entities);
-
     public virtual async Task DeleteByIdAsync(params object[] keys) =>
         Delete(await _dbSet.FindAsync(keys) ?? throw new KeyNotFoundException());
 
-    public virtual async Task DeleteByIdAsync(IEnumerable<object> keys) =>
-        Delete(await _dbSet.FindAsync(keys) ?? throw new KeyNotFoundException());
-
     public async Task DeleteRangeByKeysAsync(params object[] keys) =>
-        await keys.ToAsyncEnumerable().ForEachAwaitAsync(async key => await DeleteByIdAsync(key));
-
-    public async Task DeleteRangeByKeysAsync(IEnumerable<object> keys) =>
         await keys.ToAsyncEnumerable().ForEachAwaitAsync(async key => await DeleteByIdAsync(key));
 
     public virtual void Update(params TEntity[] entities) => _dbSet.UpdateRange(entities);
