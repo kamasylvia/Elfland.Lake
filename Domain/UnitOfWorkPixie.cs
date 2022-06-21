@@ -48,7 +48,11 @@ public abstract class UnitOfWorkPixie<TDbContext> : IUnitOfWorkPixie where TDbCo
         }
     }
 
-    public virtual async Task<bool> SaveAndCommitAsync(CancellationToken cancellationToken = default(CancellationToken)) => await SaveChangesAsync(cancellationToken) && await CommitTransactionAsync(cancellationToken);
+    public virtual async Task<bool> SaveAndCommitAsync(
+        CancellationToken cancellationToken = default(CancellationToken)
+    ) =>
+        await SaveChangesAsync(cancellationToken)
+        && await CommitTransactionAsync(cancellationToken);
 
     #region Disposable
     private bool disposed = false;
