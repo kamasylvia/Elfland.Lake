@@ -30,7 +30,7 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
     Task<IEnumerable<TEntity>> InsertRangeAsync(IEnumerable<TEntity> entities);
 
     // Update
-    void Update(TEntity entities);
+    void Update(TEntity entity);
     void UpdateRange(IEnumerable<TEntity> entities);
 
     // Delete
