@@ -20,6 +20,7 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         _dbSet = context.Set<TEntity>();
     }
 
+    #region Read
     public virtual async Task<IEnumerable<TEntity>> SearchAsync(
         int start = 0,
         int? end = null,
@@ -74,26 +75,41 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
     public virtual async Task<TEntity?> FindByIdAsync(params object[] keys) =>
         await _dbSet.FindAsync(keys);
 
-    public async Task<IEnumerable<TEntity>> FindRangeAsync(params object[] keys) =>
+    public async Task<IEnumerable<TEntity>> FindRangeAsync(IEnumerable<object> keys) =>
         await keys.ToAsyncEnumerable()
             .SelectAwait(async key => await FindByIdAsync(key) ?? throw new KeyNotFoundException())
             .ToListAsync();
 
-    public virtual async Task AddAsync(params TEntity[] entities) =>
-        await _dbSet.AddRangeAsync(entities);
+    #endregion
+
+    #region Create
+    public virtual async Task AddAsync(TEntity entity) =>
+        await _dbSet.AddAsync(entity);
+
+    public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities) => await _dbSet.AddRangeAsync(entities);
 
     public virtual async Task<TEntity> InsertAsync(TEntity entity) =>
         (await _dbSet.AddAsync(entity)).Entity;
 
-    public virtual void Delete(params TEntity[] entities) => _dbSet.RemoveRange(entities);
+    public virtual async Task<IEnumerable<TEntity>> InsertRangeAsync(IEnumerable<TEntity> entities) =>
+        await entities.ToAsyncEnumerable().SelectAwait(async entity => await InsertAsync(entity)).ToListAsync();
+    #endregion
 
-    public virtual async Task DeleteByIdAsync(params object[] keys) =>
-        Delete(await _dbSet.FindAsync(keys) ?? throw new KeyNotFoundException());
+    #region Delete
+    public virtual void Delete(TEntity entity) => _dbSet.Remove(entity);
 
-    public async Task DeleteRangeByKeysAsync(params object[] keys) =>
+    public virtual void DeleteRange(IEnumerable<TEntity> entities) => _dbSet.RemoveRange(entities);
+
+    public virtual async Task DeleteByIdAsync(params object[] keyValues) =>
+        Delete(await _dbSet.FindAsync(keyValues) ?? throw new KeyNotFoundException());
+
+    public virtual async Task DeleteRangeByKeysAsync(IEnumerable<object> keys) =>
         await keys.ToAsyncEnumerable().ForEachAwaitAsync(async key => await DeleteByIdAsync(key));
+    #endregion
 
-    public virtual void Update(params TEntity[] entities) => _dbSet.UpdateRange(entities);
+    #region Update
+    public virtual void Update(TEntity entities) => _dbSet.Update(entities);
 
-    public virtual void Update(IEnumerable<TEntity> entities) => _dbSet.UpdateRange(entities);
+    public virtual void UpdateRange(IEnumerable<TEntity> entities) => _dbSet.UpdateRange(entities);
+    #endregion
 }

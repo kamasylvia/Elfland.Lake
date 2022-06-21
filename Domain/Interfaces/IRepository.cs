@@ -5,12 +5,8 @@ namespace Elfland.Lake.Domain.Interfaces;
 public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoot
 {
     // Read
-    Task<TEntity?> FindByIdAsync(params object[] keys);
-
-    // Task<TEntity?> FindByIdAsync(IEnumerable<object> keys);
-    Task<IEnumerable<TEntity>> FindRangeAsync(params object[] keys);
-
-    // Task<IEnumerable<TEntity>> FindRangeAsync(IEnumerable<object> keys);
+    Task<TEntity?> FindByIdAsync(params object[] keyValues);
+    Task<IEnumerable<TEntity>> FindRangeAsync(IEnumerable<object> keys);
     Task<IEnumerable<TEntity>> SearchAsync(
         int start = 0,
         int? end = null,
@@ -28,23 +24,18 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
     );
 
     // Create
-    Task AddAsync(params TEntity[] entities);
-
-    // Task AddAsync(IEnumerable<TEntity> entities);
+    Task AddAsync(TEntity entity);
+    Task AddRangeAsync(IEnumerable<TEntity> entities);
     Task<TEntity> InsertAsync(TEntity entity);
+    Task<IEnumerable<TEntity>> InsertRangeAsync(IEnumerable<TEntity> entities);
 
     // Update
-    void Update(params TEntity[] entities);
-
-    // void Update(IEnumerable<TEntity> entities);
+    void Update(TEntity entities);
+    void UpdateRange(IEnumerable<TEntity> entities);
 
     // Delete
-    void Delete(params TEntity[] entities);
-
-    // void Delete(IEnumerable<TEntity> entities);
-    Task DeleteByIdAsync(params object[] keys);
-
-    // Task DeleteByIdAsync(IEnumerable<object> keys);
-    Task DeleteRangeByKeysAsync(params object[] keys);
-    // Task DeleteRangeByKeysAsync(IEnumerable<object> keys);
+    void Delete(TEntity entity);
+    void DeleteRange(IEnumerable<TEntity> entities);
+    Task DeleteByIdAsync(params object[] keyValues);
+    Task DeleteRangeByKeysAsync(IEnumerable<object> keys);
 }
