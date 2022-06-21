@@ -6,4 +6,5 @@ public interface IUnitOfWorkPixie : IDisposable
     Task<bool> CommitTransactionAsync(
         CancellationToken cancellationToken = default(CancellationToken)
     );
+    Task<bool> SaveAndCommitAsync(CancellationToken cancellationToken = default(CancellationToken));
 }
