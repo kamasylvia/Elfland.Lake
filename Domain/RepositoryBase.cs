@@ -20,7 +20,7 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         _dbSet = context.Set<TEntity>();
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetListAsync(
+    public virtual async Task<IEnumerable<TEntity>> SearchAsync(
         int start = 0,
         int? end = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
@@ -55,7 +55,7 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
             : await query.Skip(start).ToListAsync();
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetPaginationAsync(
+    public virtual async Task<IEnumerable<TEntity>> SearchByPaginationAsync(
         int pageIndex,
         int pageSize,
         Expression<Func<TEntity, bool>>? filter = null,
@@ -63,7 +63,7 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         string includeProperties = "",
         params Expression<Func<TEntity, bool>>[] filters
     ) =>
-        await GetListAsync(
+        await SearchAsync(
             start: pageIndex * pageSize,
             end: (pageIndex + 1) * pageSize,
             orderBy: orderBy,
@@ -71,59 +71,42 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
             filters: filters
         );
 
-    public virtual async Task<TEntity?> FindByIdAsync(params object[] id) =>
-        await _dbSet.FindAsync(id);
+    public virtual async Task<TEntity?> FindByIdAsync(params object[] keys) =>
+        await _dbSet.FindAsync(keys);
 
-    public virtual async Task<TEntity?> FindByIdAsync(IEnumerable<object> id) =>
-        await _dbSet.FindAsync(id);
+    public virtual async Task<TEntity?> FindByIdAsync(IEnumerable<object> keys) =>
+        await _dbSet.FindAsync(keys);
 
-    public async Task<IEnumerable<TEntity>> FindRangeAsync(params object[] keys)
-    {
-        var result = new List<TEntity>();
-        foreach (var item in keys)
-        {
-            result.Add((await FindByIdAsync(item!))!);
-        }
-        return result;
-    }
+    public async Task<IEnumerable<TEntity>> FindRangeAsync(params object[] keys) => await keys.ToAsyncEnumerable().SelectAwait(async key => await FindByIdAsync(key) ?? throw new KeyNotFoundException()).ToListAsync();
 
     public Task<IEnumerable<TEntity>> FindRangeAsync(IEnumerable<object> keys) =>
         FindRangeAsync(keys.ToArray());
 
-    public virtual async Task AddAsync(TEntity entity) => await _dbSet.AddAsync(entity);
-
-    public virtual async Task AddRangeAsync(params TEntity[] entities) =>
+    public virtual async Task AddAsync(params TEntity[] entities) =>
         await _dbSet.AddRangeAsync(entities);
 
-    public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities) =>
+    public virtual async Task AddAsync(IEnumerable<TEntity> entities) =>
         await _dbSet.AddRangeAsync(entities);
 
     public virtual async Task<TEntity> InsertAsync(TEntity entity) =>
         (await _dbSet.AddAsync(entity)).Entity;
 
-    public virtual void DeleteByEntity(TEntity entityToDelete) => _dbSet.Remove(entityToDelete);
+    public virtual void Delete(params TEntity[] entities) => _dbSet.RemoveRange(entities);
 
-    public virtual async Task DeleteByIdAsync(object id) => DeleteByEntity(await _dbSet.FindAsync(id) ?? throw new KeyNotFoundException());
+    public virtual void Delete(IEnumerable<TEntity> entities) =>
+        _dbSet.RemoveRange(entities);
 
-    public virtual async Task DeleteByIdAsync(params object[] ids) => DeleteByEntity(await _dbSet.FindAsync(ids) ?? throw new KeyNotFoundException());
+    public virtual async Task DeleteByIdAsync(params object[] keys) => Delete(await _dbSet.FindAsync(keys) ?? throw new KeyNotFoundException());
 
-    public virtual async Task DeleteByIdAsync(IEnumerable<object> ids) => DeleteByEntity(await _dbSet.FindAsync(ids) ?? throw new KeyNotFoundException());
-
-    public virtual void DeleteRange(params TEntity[] entityToDelete) =>
-        _dbSet.RemoveRange(entityToDelete);
-
-    public virtual void DeleteRange(IEnumerable<TEntity> entityToDelete) =>
-        _dbSet.RemoveRange(entityToDelete);
+    public virtual async Task DeleteByIdAsync(IEnumerable<object> keys) => Delete(await _dbSet.FindAsync(keys) ?? throw new KeyNotFoundException());
 
     public async Task DeleteRangeByKeysAsync(params object[] keys) =>
-        DeleteRange(await FindRangeAsync(keys));
+        await keys.ToAsyncEnumerable().ForEachAsync(async key => await DeleteByIdAsync(key));
 
     public async Task DeleteRangeByKeysAsync(IEnumerable<object> keys) =>
-        DeleteRange(await FindRangeAsync(keys));
+        await keys.ToAsyncEnumerable().ForEachAsync(async key => await DeleteByIdAsync(key));
 
-    public virtual void Update(TEntity entityToUpdate) => _dbSet.Update(entityToUpdate);
+    public virtual void Update(params TEntity[] entities) => _dbSet.UpdateRange(entities);
 
-    public virtual void UpdateRange(params TEntity[] entities) => _dbSet.UpdateRange(entities);
-
-    public virtual void UpdateRange(IEnumerable<TEntity> entities) => _dbSet.UpdateRange(entities);
+    public virtual void Update(IEnumerable<TEntity> entities) => _dbSet.UpdateRange(entities);
 }

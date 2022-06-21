@@ -5,18 +5,18 @@ namespace Elfland.Lake.Domain.Interfaces;
 public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoot
 {
     // Read
-    Task<TEntity?> FindByIdAsync(params object[] id);
-    Task<TEntity?> FindByIdAsync(IEnumerable<object> id);
+    Task<TEntity?> FindByIdAsync(params object[] keys);
+    Task<TEntity?> FindByIdAsync(IEnumerable<object> keys);
     Task<IEnumerable<TEntity>> FindRangeAsync(params object[] keys);
     Task<IEnumerable<TEntity>> FindRangeAsync(IEnumerable<object> keys);
-    Task<IEnumerable<TEntity>> GetListAsync(
+    Task<IEnumerable<TEntity>> SearchAsync(
         int start = 0,
         int? end = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         string includeProperties = "",
         params Expression<Func<TEntity, bool>>[] filters
     );
-    Task<IEnumerable<TEntity>> GetPaginationAsync(
+    Task<IEnumerable<TEntity>> SearchByPaginationAsync(
         int pageIndex,
         int pageSize,
         Expression<Func<TEntity, bool>>? filter = null,
@@ -26,23 +26,17 @@ public interface IRepository<TEntity> where TEntity : EntityPixie, IAggregateRoo
     );
 
     // Create
-    Task AddAsync(TEntity entity);
-    Task AddRangeAsync(params TEntity[] entities);
-    Task AddRangeAsync(IEnumerable<TEntity> entities);
+    Task AddAsync(params TEntity[] entities);
+    Task AddAsync(IEnumerable<TEntity> entities);
     Task<TEntity> InsertAsync(TEntity entity);
 
     // Update
-    void Update(TEntity entity);
-    void UpdateRange(params TEntity[] entities);
-    void UpdateRange(IEnumerable<TEntity> entities);
+    void Update(params TEntity[] entities);
+    void Update(IEnumerable<TEntity> entities);
 
     // Delete
-    void DeleteByEntity(TEntity entityToDelete);
-    Task DeleteByIdAsync(object id);
-    Task DeleteByIdAsync(params object[] ids);
-    Task DeleteByIdAsync(IEnumerable<object> ids);
-    void DeleteRange(params TEntity[] entityToDelete);
-    void DeleteRange(IEnumerable<TEntity> entityToDelete);
-    Task DeleteRangeByKeysAsync(params object[] keys);
-    Task DeleteRangeByKeysAsync(IEnumerable<object> keys);
+    void Delete(params TEntity[] entities);
+    void Delete(IEnumerable<TEntity> entities);
+    Task DeleteByIdAsync(params object[] keys);
+    Task DeleteByIdAsync(IEnumerable<object> keys);
 }
