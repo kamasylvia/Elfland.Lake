@@ -12,7 +12,8 @@ public abstract class EntityPixie
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public virtual DateTime? CreatedTime { get; init; } = DateTime.UtcNow;
 
-    public virtual string? Remark { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public virtual DateTime? UpdatedTime { get; set; }
 
     private int? _requestedHashCode;
 
