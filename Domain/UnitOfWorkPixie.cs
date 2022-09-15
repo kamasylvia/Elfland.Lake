@@ -21,6 +21,17 @@ public abstract class UnitOfWorkPixie<TDbContext> : IUnitOfWorkPixie where TDbCo
     )
     {
         _currentTransaction ??= await _context.Database.BeginTransactionAsync(cancellationToken);
+
+        _context.ChangeTracker
+            .Entries()
+            .Where(
+                entry =>
+                    entry.Entity is EntityPixie
+                    && (entry.State == EntityState.Added || entry.State == EntityState.Modified)
+            )
+            .ToList()
+            .ForEach(entry => (entry.Entity as EntityPixie)!.UpdatedTime = DateTime.Now);
+
         return await _context.SaveChangesAsync(cancellationToken) >= 0;
     }
 
