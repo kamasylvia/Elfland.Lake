@@ -30,7 +30,17 @@ public abstract class UnitOfWorkPixie<TDbContext> : IUnitOfWorkPixie where TDbCo
                     && (entry.State == EntityState.Added || entry.State == EntityState.Modified)
             )
             .ToList()
-            .ForEach(entry => (entry.Entity as EntityPixie)!.UpdatedTime = DateTime.Now);
+            .ForEach(entry =>
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    (entry.Entity as EntityPixie)!.UpdatedTime = (entry.Entity as EntityPixie)!.CreatedTime;
+                }
+                else
+                {
+                    (entry.Entity as EntityPixie)!.UpdatedTime = DateTime.UtcNow;
+                }
+            });
 
         return await _context.SaveChangesAsync(cancellationToken) >= 0;
     }
