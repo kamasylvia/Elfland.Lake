@@ -34,7 +34,9 @@ public abstract class UnitOfWorkPixie<TDbContext> : IUnitOfWorkPixie where TDbCo
             {
                 if (entry.State == EntityState.Added)
                 {
-                    (entry.Entity as EntityPixie)!.UpdatedTime = (entry.Entity as EntityPixie)!.CreatedTime;
+                    (entry.Entity as EntityPixie)!.UpdatedTime = (
+                        entry.Entity as EntityPixie
+                    )!.CreatedTime;
                 }
                 else
                 {
