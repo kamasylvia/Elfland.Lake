@@ -3,20 +3,21 @@ A tool box for WebAPI application.
 
 # Library
 ## Automatic dependency injection.
-Add `[Dependency]` to your service.
+Add `[ApplicationService]` to your service.
 
 ```cs
-[Dependency(ServiceLifetime.Scope)] // Default life time is ServiceLifetime.Transient
+[ApplicationService(ServiceLifetime.Scope)] // Default life time is ServiceLifetime.Transient
 public class CustomService
 {
 }
 ```
 
-Add `builder.Services.AddDependencies()` to `Program.cs`
+Add `builder.Services.AddApplicationServices()` to `Program.cs`
 ```cs
 ...
 
-builder.Services.AddDependencies();
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
+...
 ```
