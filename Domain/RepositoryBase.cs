@@ -120,7 +120,7 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
     #endregion
 
     #region Update
-    public virtual void Update(TEntity entities) => _dbSet.Update(entities);
+    public virtual void Update(TEntity entity) => _dbSet.Update(entity);
 
     public virtual void UpdateRange(IEnumerable<TEntity> entities) => _dbSet.UpdateRange(entities);
     #endregion
