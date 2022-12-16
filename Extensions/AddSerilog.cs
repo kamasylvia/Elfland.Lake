@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Serilog;
 
-namespace Extensions;
+namespace Elfland.Lake.Extensions;
 
 public static partial class ProgramExtensions
 {
