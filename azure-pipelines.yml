@@ -11,36 +11,39 @@ trigger:
       - master
       - dev
 
+variables:
+  - group: git-global-configs
+  - group: tokens
+
 resources:
 - repo: self
 
 pool:
-  vmImage: windows-2022
+  vmImage: windows-latest
 
 steps:
   # Allow scripts to access the system token
   - checkout: self
     persistCredentials: true
-  # Install CSharpier
   - task: DotNetCoreCLI@2
     inputs:
       command: 'custom'
       custom: 'tool'
       arguments: 'install -g csharpier'
-  # Run CSarpier to format the source code
+    displayName: "Install CSharpier."
   - task: DotNetCoreCLI@2
     inputs:
       command: 'custom'
       custom: 'csharpier'
       arguments: '.'
-  # Before git commands, be sure your account's default identity is set
+    displayName: "Format the source code with CShpier."
   - task: CmdLine@2
     continueOnError: true
     inputs:
       script: |
-        git config --global user.email "$(Email)"
-        git config --global user.name "$(Username)"
-  # Push formatted code back to remote repository
+        git config --global user.email "$(EMAIL)"
+        git config --global user.name "$(USERNAME)"
+    displayName: "Set global git configs."
   - task: CmdLine@2
     continueOnError: true
     inputs:
@@ -49,17 +52,18 @@ steps:
         git add -A
         git commit --allow-empty -m "Format source code with CSharpier [skip ci]"
         git push
-  # Package
+    displayName: "Push formatted code back to the remote repository."
   - task: DotNetCoreCLI@2
     inputs:
       command: 'pack'
       packagesToPack: '**/*.csproj'
       versioningScheme: 'byEnvVar'
       versionEnvVar: 'BUILD_BUILDNUMBER'
-  # Push
+    displayName: "Package"
   - task: NuGetCommand@2
     inputs:
       command: 'push'
       packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
       nuGetFeedType: 'external'
       publishFeedCredentials: 'NuGet.org'
+    displayName: "Push to NuGet.org"
