@@ -53,6 +53,9 @@ steps:
         git add -A
         git commit --allow-empty -m "Format source code with CSharpier [skip ci]"
         git push
+        git clone --mirror $(Build.Repository.Uri) $(Build.Repository.Name)
+        git -C $(Build.Repository.Name) push --mirror https://$(GITHUB_PAT)@$(GITHUB_REPO)
+
     displayName: "Push formatted code back to the remote repository."
   - task: DotNetCoreCLI@2
     inputs:
