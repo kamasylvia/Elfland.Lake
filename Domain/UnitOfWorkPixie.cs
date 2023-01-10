@@ -34,13 +34,13 @@ public abstract class UnitOfWorkPixie<TDbContext> : IUnitOfWorkPixie where TDbCo
             {
                 if (entry.State == EntityState.Added)
                 {
-                    (entry.Entity as EntityPixie)!.UpdatedTime = (
+                    (entry.Entity as EntityPixie)!.LastWriteTimeUtc = (
                         entry.Entity as EntityPixie
-                    )!.CreatedTime;
+                    )!.CreationTimeUtc;
                 }
                 else
                 {
-                    (entry.Entity as EntityPixie)!.UpdatedTime = DateTime.UtcNow;
+                    (entry.Entity as EntityPixie)!.LastWriteTimeUtc = DateTime.UtcNow;
                 }
             });
 
