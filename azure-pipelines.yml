@@ -36,7 +36,7 @@ steps:
       command: 'custom'
       custom: 'csharpier'
       arguments: '.'
-    displayName: "Format the source code with CShpier."
+    displayName: "Format the source code with CSharpier."
   - task: CmdLine@2
     continueOnError: true
     inputs:
@@ -48,6 +48,7 @@ steps:
     continueOnError: true
     inputs:
       script: |
+        git fetch
         git checkout $(Build.SourceBranchName)
         git add -A
         git commit --allow-empty -m "Format source code with CSharpier [skip ci]"

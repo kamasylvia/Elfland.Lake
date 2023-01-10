@@ -5,7 +5,7 @@ namespace Elfland.Lake.Attributes;
 [AttributeUsage(AttributeTargets.Class)]
 public class ApplicationServiceAttribute : Attribute
 {
-    public ServiceLifetime Lifetime { get; set; } = ServiceLifetime.Transient;
+    public ServiceLifetime Lifetime { get; set; } = ServiceLifetime.Scoped;
 
     public ApplicationServiceAttribute() { }
 
