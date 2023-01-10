@@ -25,6 +25,11 @@ steps:
   # Allow scripts to access the system token
   - checkout: self
     persistCredentials: true
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '7.x'
+    displayName: "Use .NET SDK 7.x"
   - task: DotNetCoreCLI@2
     inputs:
       command: 'custom'
