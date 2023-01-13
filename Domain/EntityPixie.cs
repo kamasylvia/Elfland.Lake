@@ -6,7 +6,6 @@ namespace Elfland.Lake.Domain;
 
 public abstract class EntityPixie
 {
-    [Key]
     public virtual Guid? Id { get; protected set; } = NewId.NextGuid();
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

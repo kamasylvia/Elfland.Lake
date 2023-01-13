@@ -75,7 +75,7 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
     public virtual async Task<TEntity?> FindByIdAsync(params object[] keys) =>
         await _dbSet.FindAsync(keys);
 
-    public async Task<IEnumerable<TEntity>> FindRangeAsync<TKey>(IEnumerable<TKey> keys) =>
+    public virtual async Task<IEnumerable<TEntity>> FindRangeAsync<TKey>(IEnumerable<TKey> keys) =>
         await keys.ToAsyncEnumerable()
             .SelectAwait(
                 async key =>
